@@ -1,17 +1,17 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = "petclinic-app"
+        IMAGE_NAME = "petclinic-image"
     }
     parameters {
         booleanParam(name: 'run_tests', defaultValue: true, description: 'Run all tests')
         string(name: 'branch', defaultValue: 'main', description: 'Branch to use for running jenkins pipeline')
     }
     stages {
-        stage('Build') {
+        stage('Compile') {
 
             steps {
-                echo 'Building..'
+                echo 'Compiling..'
                 git(url: 'https://github.com/spring-projects/spring-petclinic.git',
                     branch: 'main')
                 sh " ./mvnw clean compile "
@@ -34,12 +34,12 @@ pipeline {
                 }
             }
         }
-        stage('Package as docker') {
+        stage('Package') {
             steps {
                 script {
                     sh "./mvnw package"
                     pet_clinic_img = docker.build("$IMAGE_NAME", "-f ./Dockerfile .")
-                    echo "Build finished successfully"
+                    echo "Finished successfully"
                }
             }
         }
