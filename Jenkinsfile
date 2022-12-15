@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'docker'
-    }
+    agent any
     environment {
         IMAGE_NAME = "petclinic-image"
     }
@@ -17,6 +15,11 @@ pipeline {
                 echo 'Building..'
                 git(url: 'https://github.com/spring-projects/spring-petclinic.git',
                     branch: 'main')
+                sh """
+                    ./mvnw generate-resources
+                    ./mvnw package
+                    java -jar target/*.jar
+                """
 // todo -erase!!
 //                 sh """
 //                  git clone https://github.com/spring-projects/spring-petclinic.git
@@ -28,8 +31,16 @@ pipeline {
             when {
                 expression { return params.run_tests }
             }
+
             steps {
                 echo 'Testing..'
+                sh "./mvnw test"
+            }
+
+            post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
             }
         }
         stage('Package as docker') {
