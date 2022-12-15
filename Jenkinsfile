@@ -1,11 +1,10 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = "petclinic-image"
+        IMAGE_NAME = "petclinic-app"
     }
     parameters {
         booleanParam(name: 'run_tests', defaultValue: true, description: 'Run all tests')
-        booleanParam(name: 'push_image', defaultValue: false, description: 'Push image to repo')
         string(name: 'branch', defaultValue: 'main', description: 'Branch to use for running jenkins pipeline')
     }
     stages {
@@ -38,20 +37,11 @@ pipeline {
         stage('Package as docker') {
             steps {
                 script {
-                    sh "pwd; ls;"
-                    pet_clinic_img = docker.build("${image_name}", "-f ./Dockerfile")
+                    sh "./mvnw package"
+                    pet_clinic_img = docker.build("$IMAGE_NAME", "-f ./Dockerfile .")
                     echo "Build finished successfully"
-
-                    if (params.push_image) {
-                        "Pushing image..."
-                        pet_clinic_img.push()
-                    }
-    //                 sh """
-    //                     docker build --tag petclinic-app .
-    //                 """
                }
             }
         }
     }
-
 }
