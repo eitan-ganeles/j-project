@@ -11,21 +11,14 @@ pipeline {
     }
     stages {
         stage('Build') {
+
             steps {
                 echo 'Building..'
                 git(url: 'https://github.com/spring-projects/spring-petclinic.git',
                     branch: 'main')
-                sh """
-                    ./mvnw generate-resources
-                    ./mvnw package
-                    java -jar target/*.jar
-                """
-// todo -erase!!
-//                 sh """
-//                  git clone https://github.com/spring-projects/spring-petclinic.git
-//                  cd spring-petclinic
-//                 """
+                sh " ./mvnw clean compile "
             }
+
         }
         stage('Test') {
             when {
