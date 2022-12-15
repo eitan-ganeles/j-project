@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'node:16.13.1-alpine' }
-    }
+    agent any
     environment {
         IMAGE_NAME = "petclinic-image"
     }
@@ -41,6 +39,7 @@ pipeline {
         stage('Package as docker') {
             steps {
                 script {
+                    sh "pwd; ls;"
                     image_name = "$IMAGE_NAME"
                     if (params.tag_image != '') {
                         image_name += ":${params.tag_image}"
