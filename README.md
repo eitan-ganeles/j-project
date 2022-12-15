@@ -14,7 +14,8 @@ There are 3 steps:
 3. Package - packages the project as a runnable Docker image. This stage builds the file named `./Dockerfile`.
 
 ### Pipeline Parameters
-Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/) or [Gradle](https://spring.io/guides/gs/gradle/). You can build a jar file and run it from the command line (it should work just as well with Java 11 or newer):
+1. run_tests - set to False if you want to skip the testing stage.
+2. branch - the branch in the j-project repo the Jenkinsfile should be taken from.  
 
 ### Docker 
 In order to run the docker image that was build run from command line:
