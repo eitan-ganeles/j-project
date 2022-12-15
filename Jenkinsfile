@@ -6,7 +6,6 @@ pipeline {
     parameters {
         booleanParam(name: 'run_tests', defaultValue: true, description: 'Run all tests')
         booleanParam(name: 'push_image', defaultValue: false, description: 'Push image to repo')
-        string(name: 'tag_image', defaultValue: '', description: 'Add a specific tag to the build')
         string(name: 'branch', defaultValue: 'main', description: 'Branch to use for running jenkins pipeline')
     }
     stages {
@@ -40,11 +39,6 @@ pipeline {
             steps {
                 script {
                     sh "pwd; ls;"
-                    image_name = "$IMAGE_NAME"
-                    if (params.tag_image != '') {
-                        image_name += ":${params.tag_image}"
-                    }
-
                     pet_clinic_img = docker.build("${image_name}", "-f ./Dockerfile")
                     echo "Build finished successfully"
 
